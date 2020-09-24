@@ -1,0 +1,63 @@
+# Prerequisites
+*.d
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+# Precompiled Headers
+*.gch
+*.pch
+# Compiled Dynamic libraries
+*.dylib
+*.dll
+# Fortran module files
+*.mod
+*.smod
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+# Executables
+*.exe
+*.out
+*.app
+# Simulink code generation folders
+slprj/
+sccprj/
+# Simulink autosave extension
+*.autosave
+# Windows default autosave extension
+*.asv
+# build folder for automated making and testing
+/build/*
+!/build/Readme.md
+
+# PyCharm and CLion ide files
+*.idea/*
+*__pycache__/
+*.pyc
+
+# ROS stuff
+*.bag
+# Pickled Data files
+*.pckl
+
+# logs folder
+/logs/*
+
+# Specific files
+python_igraph-0\.7\.1\.post6-cp37-cp37m-win32\.whl
+testing_tools/zone_id\.csv
+
+vp_qp/logs/
+venv/
+
+# Package build folder
+*build/
+dist/
+graph_ltpl.egg-info/
+
+# Sphinx code apidoc
+docs/source/software_imp/*
