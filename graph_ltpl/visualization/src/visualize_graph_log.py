@@ -259,9 +259,24 @@ class DebugHandler(object):
                              for k_item, t_item in zip(k_sublist, t_sublist)]
             plot_handler_in.plot_time_rel_line(line_coords_list=[vel_info_list, kappa_info_list, psi_info_list])
 
+            # plot calculated paths
+            plot_handler_in.highlight_lines(line_coords_list=nodes_coords_log,
+                                            id_in='Node Solution',
+                                            color_base=[1, 1, 0])
+
+            plot_handler_in.highlight_lines(line_coords_list=list(pos_list.values())[0],
+                                            id_in='Local Path')
+
+            # plot prediction
+            plot_handler_in.update_obstacles(obstacle_pos_list=[obj.get_prediction()[-1, :] for obj in obj_veh],
+                                             obstacle_radius_list=[obj.get_radius() for obj in obj_veh],
+                                             object_id='Prediction',
+                                             color='grey')
+
             # plot regular objects
             plot_handler_in.update_obstacles(obstacle_pos_list=[x.get_pos() for x in obj_veh],
-                                             obstacle_radius_list=[x.get_radius() for x in obj_veh])
+                                             obstacle_radius_list=[x.get_radius() for x in obj_veh],
+                                             object_id='Objects')
 
             # plot virtual objects
             plot_handler_in.update_obstacles(obstacle_pos_list=[x[1] for x in obj_virt_data],
@@ -269,29 +284,17 @@ class DebugHandler(object):
                                              object_id='virtual',
                                              color='TUM_grey_dark')
 
-            # Plot prediction
-            for obj in obj_veh:
-                plot_handler.highlight_pos(pos_coords=obj.get_prediction()[-1, :],
-                                           color_str='grey',
-                                           id_in='prediction' + str(obj.id),
-                                           zorder=0,
-                                           radius=obj.get_radius())
-
             if len(const_path_seg) > 0:
                 plot_handler.highlight_pos(pos_coords=const_path_seg[-1, :],
                                            color_str='c',
                                            zorder=5,
                                            radius=2,
-                                           id_in='start_node')
-
-            plot_handler_in.highlight_lines(line_coords_list=nodes_coords_log,
-                                            id_in='log',
-                                            color_base=[1, 1, 0])
-
-            plot_handler_in.highlight_lines(line_coords_list=list(pos_list.values())[0])
+                                           id_in='Start Node')
 
             # plot pose of cut (near to actual pose)
-            plot_handler_in.highlight_pos(clip_pos)
+            plot_handler_in.highlight_pos(pos_coords=clip_pos,
+                                          id_in="Ego Position",
+                                          color_str="r")
 
             # plot selected action id
             action_ids = str(list(vel_list.keys()))
@@ -309,7 +312,7 @@ class DebugHandler(object):
             plot_handler.update_text_field(text_str=text_str,
                                            text_field_id=2)
 
-            # Plot patches for overtaking zones
+            # plot patches for overtaking zones
             patch_xy_pos_list = []
             for obj in obj_zone:
                 bound_l, bound_r = obj.get_bound_coords()

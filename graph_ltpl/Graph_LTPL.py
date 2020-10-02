@@ -469,22 +469,24 @@ class Graph_LTPL(object):
         """
 
         if self.__visual_mode:
-            # Plot extracted local path
-            self.__graph_plot_handler.highlight_lines(self.__local_trajectories)
+            # plot extracted local path
+            self.__graph_plot_handler.highlight_lines(self.__local_trajectories,
+                                                      id_in="Local Path")
 
-            # Plot obstacles
+            # plot predictions
+            self.__graph_plot_handler.update_obstacles(obstacle_pos_list=[obj.get_prediction()[-1, :] for obj in
+                                                                          self.__obj_veh],
+                                                       obstacle_radius_list=[obj.get_radius() for obj in
+                                                                             self.__obj_veh],
+                                                       object_id='Prediction',
+                                                       color='grey')
+
+            # plot obstacles
             self.__graph_plot_handler.update_obstacles(obstacle_pos_list=[x.get_pos() for x in self.__obj_veh],
-                                                       obstacle_radius_list=[x.get_radius() for x in self.__obj_veh])
+                                                       obstacle_radius_list=[x.get_radius() for x in self.__obj_veh],
+                                                       object_id='Objects')
 
-            # Plot prediction
-            for obj in self.__obj_veh:
-                self.__graph_plot_handler.highlight_pos(pos_coords=obj.get_prediction()[-1, :],
-                                                        color_str='grey',
-                                                        id_in='prediction',
-                                                        zorder=0,
-                                                        radius=obj.get_radius())
-
-            # Plot patches for overtaking zones
+            # plot patches for overtaking zones
             patch_xy_pos_list = []
             for obj in self.__obj_zone:
                 bound_l, bound_r = obj.get_bound_coords()
@@ -494,7 +496,7 @@ class Graph_LTPL(object):
 
             self.__graph_plot_handler.highlight_patch(patch_xy_pos_list=patch_xy_pos_list)
 
-            # Euclidean distances to all objects
+            # euclidean distances to all objects
             text_str = ""
             for i, vehicle in enumerate(self.__obj_veh):
                 eucl_dist = np.linalg.norm(np.array(self.__pos_est) - np.array(vehicle.get_pos()))
@@ -502,11 +504,11 @@ class Graph_LTPL(object):
             self.__graph_plot_handler.update_text_field(text_str=text_str,
                                                         text_field_id=2)
 
-            # Print selected action id
+            # print selected action id
             self.__graph_plot_handler.update_text_field(text_str=self.__prev_action_id,
                                                         color_str='r')
 
-            # Highlight ego pos
+            # highlight ego pos
             self.__graph_plot_handler.plot_vehicle(pos=self.__pos_est,
                                                    heading=next(iter(self.__action_set.values()))[0][0, 3],
                                                    width=2.0,
@@ -514,7 +516,7 @@ class Graph_LTPL(object):
                                                    zorder=100,
                                                    color_str='darkorange')
 
-            # Highlight start node of planning phase
+            # highlight start node of planning phase
             try:
                 s_pos = self.__graph_base.get_node_info(layer=self.__plan_start_node[0],
                                                         node_number=self.__plan_start_node[1],
@@ -523,7 +525,7 @@ class Graph_LTPL(object):
                                                         color_str='c',
                                                         zorder=5,
                                                         radius=2,
-                                                        id_in='start_node')
+                                                        id_in='Start Node')
             except ValueError:
                 pass
 

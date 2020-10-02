@@ -1,5 +1,10 @@
 import numpy as np
 import itertools
+
+# before loading igraph, configure to block all warnings regarding reachability of vertices
+import warnings
+warnings.filterwarnings('ignore', r"Couldn't reach some vertices")
+
 import igraph
 
 

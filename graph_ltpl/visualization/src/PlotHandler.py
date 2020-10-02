@@ -45,7 +45,7 @@ class PlotHandler(object):
         """
 
         # define canvas
-        self.__fig = plt.figure(plot_title)
+        self.__fig = plt.figure(plot_title, [13, 9])
 
         # define axes based on configuration
         if not include_timeline:
@@ -65,8 +65,9 @@ class PlotHandler(object):
             self.__time_ax2 = self.__time_ax.twinx()
             self.__time_ax2.set_title("Run analysis")
             self.__time_ax2.set_xlabel('$t$ in s')
-            self.__time_ax2.set_ylabel('$v_x$ in m/s\n'
-                                       r'$\kappa$*250+25 in 1/m')
+            self.__time_ax2.set_ylabel('$v_x$ in m/s'
+                                       '\n'
+                                       '$\kappa$*250+25 in 1/m')
             self.__time_ax2.grid()
 
             # in order to still enable onhover event with twinx
@@ -89,7 +90,8 @@ class PlotHandler(object):
             self.__time_rel_ax.minorticks_on()
 
             self.__time_rel_ax2 = self.__time_rel_ax.twinx()
-            self.__time_rel_ax2.set_ylabel(r'$\kappa$ in 1/m\n'
+            self.__time_rel_ax2.set_ylabel(r'$\kappa$ in 1/m'
+                                           '\n'
                                            r'$\psi$ in rad/(10$\pi$)')
             self.__time_rel_ax2.set_ylim([-0.1, 0.1])
 
@@ -258,7 +260,7 @@ class PlotHandler(object):
         elementd = dict()
         # couple legend entry to real line
         for leg_element, orig_element in zip(leg.get_lines(), elements):
-            leg_element.set_picker(10)  # 5 pts tolerance
+            leg_element.set_pickradius(10)  # 5 pts tolerance
             elementd[leg_element] = orig_element
 
         # line picking
@@ -310,8 +312,13 @@ class PlotHandler(object):
             for handle in self.__obstacle_handle[object_id]:
                 handle.remove()
 
-            # Reset obstacle handle list
+            # reset obstacle handle list
             del self.__obstacle_handle[object_id]
+
+            # if existing legend handles
+            if (object_id + "_legend") in self.__obstacle_handle.keys():
+                self.__obstacle_handle[object_id + "_legend"].remove()
+                del self.__obstacle_handle[object_id + "_legend"]
 
         # obstacles
         if obstacle_pos_list is not None:
@@ -329,6 +336,15 @@ class PlotHandler(object):
                 plt_circle = plt.Circle(obstacle_pos, obstacle_radius, color=color, fill=True, zorder=10)
                 handle = self.__main_ax.add_artist(plt_circle)
                 self.__obstacle_handle[object_id].append(handle)
+
+            # add further plot in order to generate legend with proper marker
+            if obstacle_pos_list:
+                self.__obstacle_handle[object_id + "_legend"], = self.__main_ax.plot(obstacle_pos_list[0][0],
+                                                                                     obstacle_pos_list[0][1],
+                                                                                     color=color, marker="o", ls="",
+                                                                                     zorder=0, label=object_id)
+
+            self.__main_ax.legend()
 
     def highlight_patch(self,
                         patch_xy_pos_list: list) -> None:
@@ -460,13 +476,23 @@ class PlotHandler(object):
             self.__highlight_pos[id_in].remove()
             del self.__highlight_pos[id_in]
 
+            if (id_in + "_legend") in self.__highlight_pos.keys():
+                self.__highlight_pos[id_in + "_legend"].remove()
+                del self.__highlight_pos[id_in + "_legend"]
+
         # plot pos
         if radius is None:
-            self.__highlight_pos[id_in], = \
-                self.__main_ax.plot(pos_coords[0], pos_coords[1], color_str + "o", zorder=zorder)
+            self.__highlight_pos[id_in], =  self.__main_ax.plot(pos_coords[0], pos_coords[1], marker="o", ls="",
+                                                                color=color_str, zorder=zorder, label=id_in)
         else:
-            plt_circle = plt.Circle(tuple(pos_coords), radius, color=color_str, fill=True, zorder=zorder)
+            plt_circle = plt.Circle(tuple(pos_coords), radius, color=color_str, fill=True, zorder=zorder, label=id_in)
             self.__highlight_pos[id_in] = self.__main_ax.add_artist(plt_circle)
+
+            # add further plot in order to generate legend with proper marker
+            self.__highlight_pos[id_in + "_legend"], = self.__main_ax.plot(pos_coords[0], pos_coords[1], color=color_str
+                                                                           , marker="o", ls="", zorder=0, label=id_in)
+
+        self.__main_ax.legend()
 
     def plot_vehicle(self,
                      pos: np.ndarray,
@@ -541,7 +567,7 @@ class PlotHandler(object):
             x_lim = self.__main_ax.get_xlim()
             y_lim = self.__main_ax.get_ylim()
             temp_handle, = self.__main_ax.plot(line_coords[:, 0], line_coords[:, 1], color=color,
-                                               linewidth=1.4, label="Local Path", zorder=99)
+                                               linewidth=1.4, label=id_in if idx == 0 else "", zorder=99)
             self.__main_ax.set_xlim(x_lim)
             self.__main_ax.set_ylim(y_lim)
 
