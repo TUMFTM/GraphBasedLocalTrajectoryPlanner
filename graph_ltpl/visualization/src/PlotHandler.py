@@ -65,9 +65,9 @@ class PlotHandler(object):
             self.__time_ax2 = self.__time_ax.twinx()
             self.__time_ax2.set_title("Run analysis")
             self.__time_ax2.set_xlabel('$t$ in s')
-            self.__time_ax2.set_ylabel('$v_x$ in m/s'
+            self.__time_ax2.set_ylabel(r'$v_x$ in m/s'
                                        '\n'
-                                       '$\kappa$*250+25 in 1/m')
+                                       r'$\kappa$*250+25 in 1/m')
             self.__time_ax2.grid()
 
             # in order to still enable onhover event with twinx
@@ -489,8 +489,9 @@ class PlotHandler(object):
             self.__highlight_pos[id_in] = self.__main_ax.add_artist(plt_circle)
 
             # add further plot in order to generate legend with proper marker
-            self.__highlight_pos[id_in + "_legend"], = self.__main_ax.plot(pos_coords[0], pos_coords[1], color=color_str
-                                                                           , marker="o", ls="", zorder=0, label=id_in)
+            self.__highlight_pos[id_in + "_legend"], = self.__main_ax.plot(pos_coords[0], pos_coords[1],
+                                                                           color=color_str, marker="o", ls="",
+                                                                           zorder=0, label=id_in)
 
         self.__main_ax.legend()
 

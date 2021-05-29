@@ -133,14 +133,8 @@ class ObjectlistDummy(object):
         """
         Lightweight function allowing to integrate forward on a given path with velocity profile.
 
-        :param pos_est:         estimated position of the vehicle
-        :param last_s_course:   s-course of the last planned trajectory
-        :param last_path:       coordinates of the last planned trajectory
-        :param last_vel_course: velocity-profile of the last planned trajectory
-        :param iter_time:       time to be driven forward along given trajectory
         :returns:
-            * **pos_out** -     new position
-            * **vel_est** -     estimated velocity at new position
+            * **obj_list** -     dummy object-list
 
         :Authors:
             * Tim Stahl <tim.stahl@tum.de>
@@ -174,11 +168,11 @@ class ObjectlistDummy(object):
 
             vel_est = np.interp(self.s, self.__s_rl, self.__vel_rl)
 
-            obj_list = [{'X': pos_out[0], 'Y': pos_out[1], 'theta': psi_out, 'type': 'physical', 'form': 'rectangle',
+            obj_list = [{'X': pos_out[0], 'Y': pos_out[1], 'theta': psi_out, 'type': 'physical',
                          'id': 1, 'length': 5.0, 'v': vel_est}]
         else:
             # define dummy objects for testing at specified position
-            objA = {'X': 127, 'Y': 82, 'theta': 0.0, 'type': 'physical', 'form': 'rectangle',
+            objA = {'X': 127, 'Y': 82, 'theta': 0.0, 'type': 'physical',
                     'id': 1, 'length': 5.0, 'width': 2.5, 'v': 0.0}
             # objB = {'X': 11.1, 'Y': 53, 'theta': 0.0, 'type': 'car', 'form': 'rectangle',
             #         'id': 1, 'length': 5.0, 'width': 2.5, 'v_x': 0.0}
@@ -205,11 +199,11 @@ if __name__ == "__main__":
 
     while True:
         # get objectlist
-        obj_list = obj_dummy.get_objectlist()
+        obj_dummy_list = obj_dummy.get_objectlist()
 
         # send object list via ZMQ
         socket.send_string("v2x_to_all", zmq.SNDMORE)
-        socket.send_json(obj_list)
+        socket.send_json(obj_dummy_list)
         print("sending object list... (s: " + str(int(obj_dummy.s)) + "m, time: " + str(time.time()) + ")")
 
         # wait some time to limit send frequency

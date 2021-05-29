@@ -129,7 +129,7 @@ the following keys:
 
 .. code-block:: python
 
-    obj1 = {'id': "unique_id123",   # id of the object
+    obj1 = {'id': 123,              # integer id of the object
             'type': "physical",     # type 'physical' (only class implemented so far)
             'X': 123.0,             # x coordinate
             'Y': 0.123,             # y coordinate
@@ -138,6 +138,10 @@ the following keys:
             'length': 3.2,          # length of the object
             'width': 2.5            # width of the object
            }
+
+{'X': 127, 'Y': 82, 'theta': 0.0, 'type': 'physical', 'form': 'rectangle',
+                    'id': 1, 'length': 5.0, 'width': 2.5, 'v': 0.0}
+
 
     obj_list = [obj1, obj2]
 
