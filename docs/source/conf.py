@@ -18,11 +18,11 @@ sys.path.append(os.path.abspath('./graph_ltpl'))
 # -- Project information -----------------------------------------------------
 
 project = 'Graph-Based Local Trajectory Planner'
-copyright = '2020, Tim Stahl'
+copyright = '2021, Tim Stahl'
 author = 'Tim Stahl'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.0.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,8 +32,11 @@ release = '0.0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx_automodapi.automodapi',
-    'sphinxcontrib.apidoc'
+    'sphinx_rtd_theme',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages'
 ]
 
 autoclass_content = 'both'
@@ -64,10 +67,24 @@ html_static_path = []
 
 
 # -- Build code documentation ------------------------------------------------
-apidoc_module_dir = '../../'
-apidoc_output_dir = 'software_imp'
-apidoc_excluded_paths = ['*setup*', '*_example*']
-apidoc_extra_args = ['-H', 'Code Documentation']
-apidoc_separate_modules = True
+def run_apidoc(_):
+    from sphinx.ext.apidoc import main
+    import os
+    import sys
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+    # specify path where the source files should be placed
+    source_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "graph_ltpl")
+
+    # specify path of the module to be documented
+    module_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "..", "graph_ltpl")
+
+    # call apidoc main
+    main(['-e', '-o', source_dir, module_dir, '--force'])
+
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
+
 
 # EOF

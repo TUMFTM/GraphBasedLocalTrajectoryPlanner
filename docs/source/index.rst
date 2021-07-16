@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Graph-Based Local Trajectory Planner Documentation
-==========================================================================
+==================================================
 
 .. image:: /figures/Title.png
   :alt: Trajectory Planner Title Image
@@ -25,17 +25,41 @@ A video of the performance at the Monteblanco track can be found `here <https://
    that you assess the overall safety of your project as a whole. By no means is this software a replacement for a valid
    safety-concept. See the license for more details.
 
+Contents
+========
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting Started:
 
-   start/main.rst
-   software/main.rst
-   software_imp/modules.rst
+   start/overview.rst
+   start/installation.rst
+   start/launching.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Software Explanation:
+   :glob:
+
+   software/inputs.rst
+   software/config.rst
+   software/basics.rst
+   software/logs.rst
+   software/devtools.rst
+
+.. note:: Further details about the actual implementation and the purpose of individual functions can be found in the
+    :doc:`graph_ltpl/modules`.
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Code Documentaion:
+
+   graph_ltpl/modules.rst
 
 
 Contributions
-=============================================================
+=============
 [1] T. Stahl, A. Wischnewski, J. Betz, and M. Lienkamp,
 “Multilayer Graph-Based Trajectory Planning for Race Vehicles in Dynamic Scenarios,”
 in 2019 IEEE Intelligent Transportation Systems Conference (ITSC), Oct. 2019, pp. 3149–3154.
