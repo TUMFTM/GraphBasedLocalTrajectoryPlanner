@@ -2,7 +2,7 @@
 
 ![Title Picture Local Planner](docs/source/figures/Title.png)
 
-The graph-based local trajectory planner is python-based and comes with open interfaces as well as debug, visualization
+The graph-based local trajectory planner is Python-based and comes with open interfaces as well as debug, visualization
 and development tools. The local planner is designed in a way to return an action set (e.g. keep straight, pass left,
 pass right), where each action is the globally cost optimal solution for that task. If any of the action primitives is
 not feasible, it is not returned in the set. That way, one can either select available actions based on a priority list
