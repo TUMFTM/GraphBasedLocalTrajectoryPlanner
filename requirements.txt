@@ -1,6 +1,6 @@
 numpy==1.18.1
 matplotlib==3.3.1
-scipy==1.3.3
+scipy==1.10.0
 python-igraph==0.8.2
 trajectory_planning_helpers==0.75
 flake8==3.7.9
